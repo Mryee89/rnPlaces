@@ -1,7 +1,6 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { AppDispatch } from './store';
-// import _default from 'react-native-maps/lib/MapLocalTile';
-import { getPlacesApi, getPlacesDetailApi } from '@/utils/api';
+import { getPlacesApi, getPlacesDetailsApi } from '@/utils/api';
 
 interface Place {
   place_id: string;
@@ -33,7 +32,7 @@ const placesSlice = createSlice({
 export const { setPlaces } = placesSlice.actions;
 export default placesSlice.reducer;
 
-// Async Action using Redux-Thunk
+// async using redux thunk
 export const fetchPlaces = (query: string) => async (dispatch: AppDispatch) => {
 
   if (!query.trim()) {
@@ -45,22 +44,16 @@ export const fetchPlaces = (query: string) => async (dispatch: AppDispatch) => {
     const placeData = await getPlacesApi(query);
 
     if (placeData.length === 0) {
-      // throw new Error("No places found");
       dispatch(setPlaces([]));
       return;
     }
 
     const placesWithDetails = await Promise.all(
       placeData.map(async (p: any) => {
-        const detailsData = await getPlacesDetailApi(p.place_id);
+        const detailsData = await getPlacesDetailsApi(p.place_id);
 
         if (detailsData) {
           return {
-            // place_id: p.place_id,
-            // name: p.name,
-            // description: p.description,
-            // latitude: detailsData.latitude,
-            // longitude: detailsData.longitude,
             ...p, address: detailsData.address, latitude: detailsData.latitude, longitude: detailsData.longitude
           };
         }

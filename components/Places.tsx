@@ -4,10 +4,10 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 
 type PlaceProps = {
-  setSelectedLocation: (location: { name: string, description: string,  address: string,latitude: number; longitude: number }) => void;
+  setSelectedPlace: (location: { name: string, description: string,  address: string,latitude: number; longitude: number }) => void;
 };
 
-const Places: React.FC<PlaceProps> = ({ setSelectedLocation }) => {
+const Places: React.FC<PlaceProps> = ({ setSelectedPlace }) => {
   const places = useSelector((state: RootState) => state.places.places);
 
   return (
@@ -18,7 +18,7 @@ const Places: React.FC<PlaceProps> = ({ setSelectedLocation }) => {
         <TouchableOpacity
           style={styles.item}
           onPress={() => {
-            setSelectedLocation({
+            setSelectedPlace({
               name: item.name,
               description: item.description,
               address: item.address,
@@ -40,8 +40,8 @@ const Places: React.FC<PlaceProps> = ({ setSelectedLocation }) => {
 const styles = StyleSheet.create({
   item: {
     padding: 12,
-    borderBottomColor: '#ddd',
     borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
     backgroundColor: '#f9f9f9',
   },
   row: {

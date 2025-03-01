@@ -6,16 +6,16 @@ import { Icon } from '@ant-design/react-native';
 
 interface SearchBarProps {
     value: string;
-    onFocus?: () => void;
     onBlur?: () => void;
+    onFocus?: () => void;
     onClear?: () => void;
     onChangeText: (text: string) => void;
 }
 
-const SearchBar = forwardRef<TextInput, SearchBarProps>(({ value, onChangeText, onFocus, onBlur, onClear }, ref) => {
+const SearchBar = forwardRef<TextInput, SearchBarProps>(({ value, onBlur, onFocus, onClear, onChangeText}, ref) => {
     const dispatch = useAppDispatch();
 
-    const handleSearch = (text: string) => {
+    const handleSearchText = (text: string) => {
         onChangeText(text);
 
         if (text.length === 0) {
@@ -28,7 +28,7 @@ const SearchBar = forwardRef<TextInput, SearchBarProps>(({ value, onChangeText, 
         }
     };
 
-    const handleClear = () => {
+    const handleClearText = () => {
         onChangeText('');
         dispatch(setPlaces([]));
         onClear?.();
@@ -41,13 +41,13 @@ const SearchBar = forwardRef<TextInput, SearchBarProps>(({ value, onChangeText, 
                     ref={ref}
                     placeholder="Search places..."
                     value={value}
-                    onChangeText={handleSearch}
+                    onChangeText={handleSearchText}
                     style={styles.input}
                     onFocus={onFocus}
                     onBlur={onBlur}
                 />
                 {value.length > 0 && (
-                    <TouchableOpacity onPress={handleClear} style={styles.clearButton}>
+                    <TouchableOpacity onPress={handleClearText} style={styles.clearButton}>
                         <Icon name="close" size="sm" color="gray" />
                     </TouchableOpacity>
                 )}
@@ -58,17 +58,17 @@ const SearchBar = forwardRef<TextInput, SearchBarProps>(({ value, onChangeText, 
 
 const styles = StyleSheet.create({
     container: {
+        padding: 12,
         flexDirection: 'row',
         alignItems: 'center',
-        padding: 12,
     },
     inputContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
         flex: 1,
         borderWidth: 1, 
-        borderColor: '#ccc',
         borderRadius: 8,
+        borderColor: '#ccc',
+        flexDirection: 'row',
+        alignItems: 'center',
         paddingHorizontal: 12,
         backgroundColor: '#fff',
     },

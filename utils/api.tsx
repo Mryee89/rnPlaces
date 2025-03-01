@@ -13,21 +13,17 @@ export const getPlacesApi = async (query: string) => {
     }));
 
   } catch (error) {
-    // console.error('API Error:', error);
     return [];
   }
 };
 
-
-
-export const getPlacesDetailApi = async (place_id: string) => {
+export const getPlacesDetailsApi = async (place_id: string) => {
   try {
     const response = await fetch(getGooglePlaceDetailsUrl(place_id));
 
     const data = await response.json();
 
     if (!data.result) {
-      // console.error('Invalid API response:', data);
       return null;
     }
 
@@ -41,7 +37,6 @@ export const getPlacesDetailApi = async (place_id: string) => {
     };
 
   } catch (error) {
-    // console.error('API Error:', error);
     return null;
   }
 };

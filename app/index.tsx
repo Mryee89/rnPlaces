@@ -8,12 +8,12 @@ import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Card } from '@ant-design/react-native';
 
 export default function HomeScreen() {
-  const mapRef = useRef<MapView>(null);
+  const gMapRef = useRef<MapView>(null);
   const searchBarRef = useRef<TextInput>(null);
 
-  const [showPlaceList, setShowPlaceList] = useState(true);
-  const [searchText, setSearchText] = useState('');
-  const [selectedLocation, setSelectedLocation] = useState<{
+  const [showPlaceListing, setShowPlaceListing] = useState(true);
+  const [searchPlace, setSearchPlace] = useState('');
+  const [selectedPlace, setSelectedPlace] = useState<{
     name: string; //place name 
     description: string; //place description 
     address: string; //place address 
@@ -22,39 +22,39 @@ export default function HomeScreen() {
   } | null>(null);
 
   useEffect(() => {
-    if (selectedLocation && mapRef.current) {
-      mapRef.current.animateToRegion(
+    if (selectedPlace && gMapRef.current) {
+      gMapRef.current.animateToRegion(
         {
-          latitude: selectedLocation.latitude,
-          longitude: selectedLocation.longitude,
+          latitude: selectedPlace.latitude,
+          longitude: selectedPlace.longitude,
           latitudeDelta: 0.02, // zoom level
           longitudeDelta: 0.02, // zoom level
         },
         1000 // animation duration (miliseconds unit)
       );
 
-      setSearchText(selectedLocation.name);
-      setShowPlaceList(false);
+      setSearchPlace(selectedPlace.name);
+      setShowPlaceListing(false);
       searchBarRef.current?.blur();
     }
-  }, [selectedLocation]);
+  }, [selectedPlace]);
 
-  const handleClearMap = () => {
-    setSearchText('');
-    setSelectedLocation(null);
+  const handleClearGMap = () => {
+    setSearchPlace('');
+    setSelectedPlace(null);
   };
 
   const handleShowSelectedLocation = (location: { name: string; description: string; address: string; latitude: number; longitude: number; }) => {
-    setShowPlaceList(false);
-    setSelectedLocation(location);
-    setSearchText(location?.name);
+    setShowPlaceListing(false);
+    setSelectedPlace(location);
+    setSearchPlace(location?.name);
   }
 
   return (
     <Provider store={store}>
       <View style={styles.container}>
         <MapView
-          ref={mapRef}
+          ref={gMapRef}
           provider={PROVIDER_GOOGLE}
           style={StyleSheet.absoluteFillObject}
           initialRegion={{
@@ -64,14 +64,14 @@ export default function HomeScreen() {
             longitudeDelta: 0.02,
           }}
         >
-          {selectedLocation && (
+          {selectedPlace && (
             <Marker
               coordinate={{
-                latitude: selectedLocation.latitude,
-                longitude: selectedLocation.longitude,
+                latitude: selectedPlace.latitude,
+                longitude: selectedPlace.longitude,
               }}
-              title={selectedLocation.name}
-              description={selectedLocation.address}
+              title={selectedPlace.name}
+              description={selectedPlace.address}
             />
           )}
         </MapView>
@@ -79,14 +79,14 @@ export default function HomeScreen() {
         <Card style={styles.cardStick}>
           <SearchBar
             ref={searchBarRef}
-            value={searchText}
-            onChangeText={(text) => setSearchText(text)} 
-            onFocus={() => setShowPlaceList(true)}
-            onClear={() => handleClearMap()}
+            value={searchPlace}
+            onChangeText={(text) => setSearchPlace(text)} 
+            onFocus={() => setShowPlaceListing(true)}
+            onClear={() => handleClearGMap()}
           />
-          <View style={showPlaceList ? {} : { display: 'none' }}>
+          <View style={showPlaceListing ? {} : { display: 'none' }}>
             <Places
-              setSelectedLocation={(location) => {
+              setSelectedPlace={(location) => {
                 handleShowSelectedLocation(location);
               }}
             />
@@ -102,10 +102,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   cardStick: {
-    paddingTop: 5,
-    borderBottomStartRadius: 10,
-    borderBottomEndRadius: 10,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
     elevation: 5,
+    paddingTop: 5,
+    borderBottomEndRadius: 10,
+    borderBottomStartRadius: 10,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
   },
 });
