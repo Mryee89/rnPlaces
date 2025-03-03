@@ -2,7 +2,7 @@ import React, { forwardRef } from 'react';
 import { TextInput, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useAppDispatch } from '../redux/hooks';
 import { fetchPlaces, setPlaces } from '../redux/slice';
-import { Icon } from '@ant-design/react-native';
+import { AntDesign } from '@expo/vector-icons'; 
 
 interface SearchBarProps {
     value: string;
@@ -48,7 +48,8 @@ const SearchBar = forwardRef<TextInput, SearchBarProps>(({ value, onBlur, onFocu
                 />
                 {value.length > 0 && (
                     <TouchableOpacity onPress={handleClearText} style={styles.clearButton}>
-                        <Icon name="close" size="sm" color="gray" />
+                        {/* <Icon name="close" color="gray" span={1}/> */}
+                        <AntDesign name="close" size={15} color="red" />
                     </TouchableOpacity>
                 )}
             </View>
